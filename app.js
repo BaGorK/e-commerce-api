@@ -4,11 +4,16 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import notFoundMiddleware from './middleware/not-found.js';
 import GlobalErrorHandlerMiddleware from './middleware/error-handler.js';
+import morgan from 'morgan';
 dotenv.config();
 
 const app = express();
 
 app.use(express.json());
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 app.get('/test', (req, res) => {
   res.send('e-commerce-api');
