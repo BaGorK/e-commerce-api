@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import notFoundMiddleware from './middleware/not-found.js';
 import GlobalErrorHandlerMiddleware from './middleware/error-handler.js';
 import morgan from 'morgan';
-import User from './models/userModel.js';
+import authRoute from './routes/authRoute.js';
 dotenv.config();
 
 const app = express();
@@ -20,12 +20,8 @@ app.get('/test', (req, res) => {
   return res.send('e-commerce-api');
 });
 
-app.post('/testModel', async (req, res) => {
-  const user = await User.create(req.body);
-
-  return res.json({ user });
-  // return res.send('e-commerce-api');
-});
+// Routes
+app.use('/api/v1/auth', authRoute);
 
 app.use(notFoundMiddleware);
 app.use(GlobalErrorHandlerMiddleware);
