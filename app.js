@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import notFoundMiddleware from './middleware/not-found.js';
 import GlobalErrorHandlerMiddleware from './middleware/error-handler.js';
 import morgan from 'morgan';
+import User from './models/userModel.js';
 dotenv.config();
 
 const app = express();
@@ -16,7 +17,14 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.get('/test', (req, res) => {
-  res.send('e-commerce-api');
+  return res.send('e-commerce-api');
+});
+
+app.post('/testModel', async (req, res) => {
+  const user = await User.create(req.body);
+
+  return res.json({ user });
+  // return res.send('e-commerce-api');
 });
 
 app.use(notFoundMiddleware);
