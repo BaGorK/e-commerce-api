@@ -5,6 +5,12 @@ dotenv.config();
 
 const app = express();
 
+app.use(express.json());
+
+app.get('/test', (req, res) => {
+  res.send('e-commerce-api');
+});
+
 const PORT = process.env.PORT || 5000;
 
 try {
