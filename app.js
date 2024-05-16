@@ -26,7 +26,7 @@ app.use('/api/v1/auth', authRoute);
 app.use(notFoundMiddleware);
 app.use(GlobalErrorHandlerMiddleware);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 try {
   await mongoose.connect(process.env.DB_LOCAL_URI);
