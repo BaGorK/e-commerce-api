@@ -13,13 +13,11 @@ import {
 
 const Router = express();
 
-Router.route('/').get(
-  authenticateUser,
-  authorizePermissions('admin'),
-  getAllUsers
-);
+Router.use(authenticateUser);
 
-Router.get('/showMe', authenticateUser, showCurrentUser);
+Router.route('/').get(authorizePermissions('admin'), getAllUsers);
+
+Router.get('/showMe', showCurrentUser);
 Router.patch('/updateUser', updateUser);
 Router.patch('/updateUserPassword', updateUserPassword);
 
