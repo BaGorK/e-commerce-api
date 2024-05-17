@@ -34,6 +34,9 @@ export const showCurrentUser = async (req, res, next) => {
   return res.status(StatusCodes.OK).json({
     status: 'success',
     message: 'get current users',
+    data: {
+      user: req.user,
+    },
   });
 };
 

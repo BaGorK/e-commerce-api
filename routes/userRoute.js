@@ -19,7 +19,7 @@ Router.route('/').get(
   getAllUsers
 );
 
-Router.get('/showMe', showCurrentUser);
+Router.get('/showMe', authenticateUser, showCurrentUser);
 Router.patch('/updateUser', updateUser);
 Router.patch('/updateUserPassword', updateUserPassword);
 
