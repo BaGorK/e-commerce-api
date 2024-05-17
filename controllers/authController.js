@@ -1,12 +1,13 @@
 import { StatusCodes } from 'http-status-codes';
 import User from '../models/userModel.js';
 import BadRequestError from '../errors/bad-request.js';
+import { createJWT } from '../utils/tokenUtils.js';
 
 export const register = async (req, res, next) => {
   const { name, email, password } = req.body;
 
   const isFirstUser = (await User.countDocuments()) === 0;
-  const role = isFirstUser ? 'admin' : user;
+  const role = isFirstUser ? 'admin' : 'user';
 
   if (await User.findOne({ email })) {
     throw new BadRequestError('Email already exists');
@@ -17,6 +18,18 @@ export const register = async (req, res, next) => {
     email,
     password,
     role,
+  });
+
+  const token = createJWT({
+    name: user.name,
+    userId: user._id,
+    role: user.role,
+  });
+
+  res.cookie('token', token, {
+    expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
   });
 
   return res.status(StatusCodes.CREATED).json({
