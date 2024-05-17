@@ -6,7 +6,7 @@ export const authenticateUser = async (req, res, next) => {
   const { token } = req.signedCookies;
 
   if (!token) {
-    throw new UnauthenticatedError('Authentication Invalid');
+    throw new UnauthenticatedError('Please login to our app');
   }
 
   try {
