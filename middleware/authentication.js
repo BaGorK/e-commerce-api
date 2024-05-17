@@ -1,4 +1,5 @@
 import UnauthenticatedError from '../errors/unauthenticated.js';
+import UnauthorizedError from '../errors/unauthorized.js';
 import { verifyJWT } from '../utils/tokenUtils.js';
 
 export const authenticateUser = async (req, res, next) => {
@@ -20,7 +21,9 @@ export const authenticateUser = async (req, res, next) => {
 };
 
 export const authorizePermissions = (req, res, next) => {
-  console.log('admin route');
+  if (req.user.role !== 'admin') {
+    throw new UnauthorizedError('you are not authorized to access this route');
+  }
   next();
 };
 
