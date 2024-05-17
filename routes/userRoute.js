@@ -12,8 +12,8 @@ const Router = express();
 Router.route('/').get(getAllUsers);
 
 Router.get('/showMe', showCurrentUser);
-Router.post('/updateUser', updateUser);
-Router.post('/updateUserPassword', updateUserPassword);
+Router.patch('/updateUser', updateUser);
+Router.patch('/updateUserPassword', updateUserPassword);
 
 Router.route('/:id').get(getSingleUser);
 
