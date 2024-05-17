@@ -4,6 +4,7 @@ import NotFoundError from '../errors/not-found.js';
 
 export const getAllUsers = async (req, res, next) => {
   const users = await User.find({ role: 'user' }).select('-password');
+  console.log(req.user);
 
   return res.status(StatusCodes.OK).json({
     status: 'success',
