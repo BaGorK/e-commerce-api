@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import User from '../models/userModel.js';
 import BadRequestError from '../errors/bad-request.js';
-import { createJWT } from '../utils/tokenUtils.js';
+import { attachCookiesToResponse, createJWT } from '../utils/tokenUtils.js';
 
 export const register = async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -20,16 +20,15 @@ export const register = async (req, res, next) => {
     role,
   });
 
-  const token = createJWT({
+  const tokenUser = {
     name: user.name,
     userId: user._id,
     role: user.role,
-  });
+  };
 
-  res.cookie('token', token, {
-    expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+  attachCookiesToResponse({
+    res,
+    user: tokenUser,
   });
 
   return res.status(StatusCodes.CREATED).json({
