@@ -1,5 +1,5 @@
-import { UnauthenticatedError, UnauthorizedError } from '../errors';
-import { isTokenValid } from '../utils/jwt';
+import UnauthenticatedError from '../errors/unauthenticated.js';
+import { isTokenValid } from '../utils/jwt.js';
 
 const authenticateUser = async (req, res, next) => {
   let token;
