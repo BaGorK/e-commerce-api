@@ -6,10 +6,11 @@ import {
   updateUser,
   updateUserPassword,
 } from '../controllers/userController.js';
+import { authenticateUser } from '../middleware/authentication.js';
 
 const Router = express();
 
-Router.route('/').get(getAllUsers);
+Router.route('/').get(authenticateUser, getAllUsers);
 
 Router.get('/showMe', showCurrentUser);
 Router.patch('/updateUser', updateUser);
