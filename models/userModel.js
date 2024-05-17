@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
+import { comparePasswordUtil, hashPassword } from '../utils/passwordUtils.js';
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -28,6 +29,14 @@ const UserSchema = new mongoose.Schema({
     default: 'user',
   },
 });
+
+UserSchema.pre('save', async function () {
+  this.password = await hashPassword(this.password);
+});
+
+UserSchema.methods.comparePassword = async function (candidatePass) {
+  return await comparePasswordUtil(candidatePass, this.password);
+};
 
 const User = mongoose.model('User', UserSchema);
 

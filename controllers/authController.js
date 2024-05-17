@@ -1,7 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import User from '../models/userModel.js';
 import BadRequestError from '../errors/bad-request.js';
-import { hashPassword } from '../utils/passwordUtils.js';
 
 export const register = async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -13,12 +12,10 @@ export const register = async (req, res, next) => {
     throw new BadRequestError('Email already exists');
   }
 
-  const hashedPassword = await hashPassword(password);
-
   const user = await User.create({
     name,
     email,
-    password: hashedPassword,
+    password,
     role,
   });
 
