@@ -6,17 +6,19 @@ import notFoundMiddleware from './middleware/not-found.js';
 import GlobalErrorHandlerMiddleware from './middleware/error-handler.js';
 import morgan from 'morgan';
 import authRoute from './routes/authRoute.js';
+import cookieParser from 'cookie-parser';
 dotenv.config();
 
 const app = express();
 
-app.use(express.json());
-
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+app.use(cookieParser());
+app.use(express.json());
 
-app.get('/test', (req, res) => {
+app.get('/api/v1/test', (req, res) => {
+  console.log(req.cookies);
   return res.send('e-commerce-api');
 });
 
