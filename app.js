@@ -7,6 +7,7 @@ import GlobalErrorHandlerMiddleware from './middleware/error-handler.js';
 import morgan from 'morgan';
 import authRoute from './routes/authRoute.js';
 import cookieParser from 'cookie-parser';
+import userRoute from './routes/userRoute.js';
 dotenv.config();
 
 const app = express();
@@ -26,6 +27,7 @@ app.get('/api/v1/test', (req, res) => {
 
 // Routes
 app.use('/api/v1/auth', authRoute);
+app.use('/api/v1/users', userRoute);
 
 app.use(notFoundMiddleware);
 app.use(GlobalErrorHandlerMiddleware);
