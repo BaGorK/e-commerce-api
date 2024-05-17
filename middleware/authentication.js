@@ -19,6 +19,11 @@ export const authenticateUser = async (req, res, next) => {
   }
 };
 
+export const authorizePermissions = (req, res, next) => {
+  console.log('admin route');
+  next();
+};
+
 // console.log(decoded);
 // {
 //   name: 'admin',
