@@ -47,9 +47,23 @@ export const getSingleProduct = async (req, res) => {
 };
 
 export const updateProduct = async (req, res, next) => {
+  const { id: productId } = req.params;
+
+  const product = await Product.findOneAndUpdate({ _id: productId }, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!product) {
+    throw new NotFoundError(`No Product found with id: ${productId}`);
+  }
+
   return res.status(StatusCodes.OK).json({
     status: 'success',
     message: 'updateProduct',
+    data: {
+      product,
+    },
   });
 };
 
