@@ -1,5 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import Product from '../models/productModel.js';
+import NotFoundError from '../errors/not-found.js';
 
 export const createProduct = async (req, res, next) => {
   req.body.user = req.user.userId;
@@ -28,9 +29,20 @@ export const getAllProduct = async (req, res, next) => {
 };
 
 export const getSingleProduct = async (req, res) => {
+  const { id: productId } = req.params;
+
+  const product = await Product.findOne({ _id: productId });
+
+  if (!product) {
+    throw new NotFoundError(`No Product found with id: ${productId}`);
+  }
+
   return res.status(StatusCodes.OK).json({
     status: 'success',
     message: 'getSingleProduct',
+    data: {
+      product,
+    },
   });
 };
 
