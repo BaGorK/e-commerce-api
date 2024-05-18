@@ -2,6 +2,7 @@ import { StatusCodes } from 'http-status-codes';
 import NotFoundError from '../errors/not-found.js';
 import Review from '../models/reviewModel.js';
 import BadRequestError from '../errors/bad-request.js';
+import checkPermissions from '../utils/checkPermissions.js';
 
 export const createReview = async (req, res) => {
   const { product: productId } = req.body;
@@ -74,11 +75,14 @@ export const updateReview = async (req, res) => {
 export const deleteReview = async (req, res) => {
   const { id: reviewId } = req.paras;
 
-  const review = await Review.findOneAndDelete({ _id: reviewId });
+  const review = await Review.findOne({ _id: reviewId });
 
   if (!review) {
     throw new NotFoundError(`No review found with id: ${reviewId}`);
   }
+
+  checkPermissions(req.user, review.user);
+  await review.remove();
 
   return res.status(StatusCodes.OK).json({
     status: 'success',
