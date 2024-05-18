@@ -43,6 +43,7 @@ export const showCurrentUser = async (req, res, next) => {
   });
 };
 
+// update user with findOneAndUpdate() does not execute the pre save hook
 export const updateUser = async (req, res, next) => {
   const { email, name } = req.body;
 
@@ -50,14 +51,20 @@ export const updateUser = async (req, res, next) => {
     throw new BadRequestError('please provide all values');
   }
 
-  const user = await User.findOneAndUpdate(
-    { _id: req.user.userId },
-    { email, name },
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
+  // const user = await User.findOneAndUpdate(
+  //   { _id: req.user.userId },
+  //   { email, name },
+  //   {
+  //     new: true,
+  //     runValidators: true,
+  //   }
+  // );
+
+  const user = await User.findOne({ _id: req.user.userId });
+  user.email = email;
+  user.name = name;
+
+  await user.save();
 
   attachCookiesToResponse({
     res,
