@@ -31,6 +31,11 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.pre('save', async function () {
+  // console.log(this.modifiedPaths());
+  // console.log(this.isModified('name'));
+
+  if (!this.isModified('password')) return;
+
   this.password = await hashPassword(this.password);
 });
 
