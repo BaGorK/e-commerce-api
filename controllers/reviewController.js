@@ -47,9 +47,20 @@ export const getAllReviews = async (req, res) => {
 };
 
 export const getSingleReview = async (req, res) => {
+  const { id: reviewId } = req.paras;
+
+  const review = await Review.findOne({ _id: reviewId });
+
+  if (!review) {
+    throw new NotFoundError(`No review found with id: ${reviewId}`);
+  }
+
   return res.status(StatusCodes.OK).json({
     status: 'success',
     message: 'getSingleReview',
+    data: {
+      review,
+    },
   });
 };
 
