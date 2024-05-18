@@ -12,6 +12,7 @@ import GlobalErrorHandlerMiddleware from './middleware/error-handler.js';
 import authRoute from './routes/authRoute.js';
 import userRoute from './routes/userRoute.js';
 import productRoute from './routes/productRoute.js';
+import reviewRoute from './routes/reviewRoute.js';
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.get('/api/v1/test', (req, res) => {
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/users', userRoute);
 app.use('/api/v1/products', productRoute);
+app.use('/api/v1/reviews', reviewRoute);
 
 app.use(notFoundMiddleware);
 app.use(GlobalErrorHandlerMiddleware);

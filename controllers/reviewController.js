@@ -1,5 +1,11 @@
 import { StatusCodes } from 'http-status-codes';
 
+export const createReview = async (req, res) => {
+  return res.status(StatusCodes.OK).json({
+    message: 'createReview',
+  });
+};
+
 export const getAllReviews = async (req, res) => {
   return res.status(StatusCodes.OK).json({
     message: 'getAllReviews',
