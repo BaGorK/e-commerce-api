@@ -2,6 +2,11 @@ import { StatusCodes } from 'http-status-codes';
 import Product from '../models/productModel.js';
 import NotFoundError from '../errors/not-found.js';
 import BadRequestError from '../errors/bad-request.js';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export const createProduct = async (req, res, next) => {
   req.body.user = req.user.userId;
@@ -103,8 +108,17 @@ export const uploadImage = async (req, res, next) => {
     throw new BadRequestError('Please upload Images smaller than 2MB');
   }
 
+  const fileName = `${Date.now()}-${productImage.name}`;
+
+  const imagePath = path.join(__dirname, '../public/uploads/' + `${fileName}`);
+
+  await productImage.mv(imagePath);
+
   return res.status(StatusCodes.OK).json({
     status: 'success',
     message: 'uploadImage',
+    data: {
+      image: `/uploads/${fileName}`,
+    },
   });
 };
