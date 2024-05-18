@@ -1,6 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import Product from '../models/productModel.js';
 import NotFoundError from '../errors/not-found.js';
+import BadRequestError from '../errors/bad-request.js';
 
 export const createProduct = async (req, res, next) => {
   req.body.user = req.user.userId;
@@ -86,6 +87,22 @@ export const deleteProduct = async (req, res, next) => {
 };
 
 export const uploadImage = async (req, res, next) => {
+  if (!req.files) {
+    throw new BadRequestError('No File uploaded');
+  }
+
+  const productImage = req.files.image;
+
+  if (!productImage.mimetype.startsWith('image')) {
+    throw new BadRequestError('Please upload Images only');
+  }
+
+  const maxSize = 2 * 1024 * 1024;
+
+  if (productImage.size > maxSize) {
+    throw new BadRequestError('Please upload Images smaller than 2MB');
+  }
+
   return res.status(StatusCodes.OK).json({
     status: 'success',
     message: 'uploadImage',

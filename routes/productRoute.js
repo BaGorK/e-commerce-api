@@ -5,6 +5,7 @@ import {
   getAllProduct,
   getSingleProduct,
   updateProduct,
+  uploadImage,
 } from '../controllers/productController.js';
 import {
   authenticateUser,
@@ -16,6 +17,8 @@ const Router = express.Router();
 Router.route('/')
   .get(getAllProduct)
   .post([authenticateUser, authorizePermissions('admin')], createProduct);
+
+Router.post('/uploadImage', uploadImage);
 
 Router.route('/:id')
   .get(getSingleProduct)
