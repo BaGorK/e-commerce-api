@@ -16,3 +16,7 @@ const ReviewSchema = new mongoose({
     ref: 'Product',
   },
 });
+
+const Review = mongoose.model('Review', ReviewSchema);
+
+export default Review;
