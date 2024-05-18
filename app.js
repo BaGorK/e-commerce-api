@@ -1,15 +1,17 @@
 import 'express-async-errors';
+import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
+import fileUpload from 'express-fileupload';
+
 import notFoundMiddleware from './middleware/not-found.js';
 import GlobalErrorHandlerMiddleware from './middleware/error-handler.js';
-import morgan from 'morgan';
 import authRoute from './routes/authRoute.js';
-import cookieParser from 'cookie-parser';
 import userRoute from './routes/userRoute.js';
 import productRoute from './routes/productRoute.js';
-dotenv.config();
 
 const app = express();
 
@@ -17,8 +19,10 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-app.use(cookieParser(process.env.JWT_SECRET));
 app.use(express.json());
+app.use(cookieParser(process.env.JWT_SECRET));
+app.use(express.static('./public'));
+app.use(fileUpload());
 
 app.get('/api/v1/test', (req, res) => {
   // console.log(req.cookies);
