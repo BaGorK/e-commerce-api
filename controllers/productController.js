@@ -15,9 +15,15 @@ export const createProduct = async (req, res, next) => {
 };
 
 export const getAllProduct = async (req, res, next) => {
+  const products = await Product.find({});
+
   return res.status(StatusCodes.OK).json({
     status: 'success',
+    numOfProducts: products.length,
     message: 'getAllProduct',
+    data: {
+      products,
+    },
   });
 };
 
