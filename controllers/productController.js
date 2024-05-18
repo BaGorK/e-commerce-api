@@ -1,14 +1,20 @@
 import { StatusCodes } from 'http-status-codes';
 
+export const createProduct = (req, res, next) => {
+  return res.status(StatusCodes.OK).json({
+    message: 'createProduct',
+  });
+};
+
 export const getAllProduct = (req, res, next) => {
   return res.status(StatusCodes.OK).json({
     message: 'getAllProduct',
   });
 };
 
-export const createProduct = (req, res, next) => {
+export const getSingleProduct = async (req, res) => {
   return res.status(StatusCodes.OK).json({
-    message: 'createProduct',
+    message: 'getSingleProduct',
   });
 };
 
