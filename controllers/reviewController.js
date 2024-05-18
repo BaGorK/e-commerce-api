@@ -1,7 +1,8 @@
 import { StatusCodes } from 'http-status-codes';
-import NotFoundError from '../errors/not-found.js';
 import Review from '../models/reviewModel.js';
+import Product from '../models/productModel.js';
 import BadRequestError from '../errors/bad-request.js';
+import NotFoundError from '../errors/not-found.js';
 import checkPermissions from '../utils/checkPermissions.js';
 
 export const createReview = async (req, res) => {
@@ -48,7 +49,7 @@ export const getAllReviews = async (req, res) => {
 };
 
 export const getSingleReview = async (req, res) => {
-  const { id: reviewId } = req.paras;
+  const { id: reviewId } = req.params;
 
   const review = await Review.findOne({ _id: reviewId });
 
@@ -73,7 +74,7 @@ export const updateReview = async (req, res) => {
 };
 
 export const deleteReview = async (req, res) => {
-  const { id: reviewId } = req.paras;
+  const { id: reviewId } = req.params;
 
   const review = await Review.findOne({ _id: reviewId });
 
