@@ -68,9 +68,20 @@ export const updateProduct = async (req, res, next) => {
 };
 
 export const deleteProduct = async (req, res, next) => {
+  const { id: productId } = req.params;
+
+  const product = await Product.findOneAndDelete({ _id: productId });
+
+  if (!product) {
+    throw new NotFoundError(`No Product found with id: ${productId}`);
+  }
+
   return res.status(StatusCodes.OK).json({
     status: 'success',
     message: 'deleteProduct',
+    data: {
+      product,
+    },
   });
 };
 
