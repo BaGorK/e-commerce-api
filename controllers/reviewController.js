@@ -34,9 +34,15 @@ export const createReview = async (req, res) => {
 };
 
 export const getAllReviews = async (req, res) => {
+  const reviews = await Review.find({});
+
   return res.status(StatusCodes.OK).json({
     status: 'success',
+    numOfReviews: reviews.length,
     message: 'getAllReviews',
+    data: {
+      reviews,
+    },
   });
 };
 
