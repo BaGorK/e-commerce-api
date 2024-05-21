@@ -11,6 +11,7 @@ import {
   authenticateUser,
   authorizePermissions,
 } from '../middleware/authentication.js';
+import { getSingleProductReviews } from '../controllers/reviewController.js';
 
 const Router = express.Router();
 
@@ -24,5 +25,7 @@ Router.route('/:id')
   .get(getSingleProduct)
   .patch([authenticateUser, authorizePermissions('admin')], updateProduct)
   .delete([authenticateUser, authorizePermissions('admin')], deleteProduct);
+
+Router.route('/:id/reviews').get(getSingleProductReviews);
 
 export default Router;

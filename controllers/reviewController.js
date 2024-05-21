@@ -116,3 +116,16 @@ export const deleteReview = async (req, res) => {
     },
   });
 };
+
+export const getSingleProductReviews = async (req, res) => {
+  const { id: productId } = req.params;
+  const reviews = await Review.find({ product: productId });
+
+  res.status(StatusCodes.OK).json({
+    status: 'success',
+    message: 'getSingleProductReviews',
+    data: {
+      reviews,
+    },
+  });
+};

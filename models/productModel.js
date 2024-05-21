@@ -72,12 +72,13 @@ const ProductSchema = new mongoose.Schema(
   }
 );
 
+// we cannot query virtual properties
 ProductSchema.virtual('reviews', {
   ref: 'Review',
   localField: '_id',
   foreignField: 'product',
   justOne: false,
-  match: { rating: 5 }, // to match a specific requirement
+  // match: { rating: 5 }, // to match a specific requirement
 });
 
 const Product = mongoose.model('Product', ProductSchema);
