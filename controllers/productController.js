@@ -5,6 +5,7 @@ import BadRequestError from '../errors/bad-request.js';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import Review from '../models/reviewModel.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -81,6 +82,8 @@ export const deleteProduct = async (req, res, next) => {
   if (!product) {
     throw new NotFoundError(`No Product found with id: ${productId}`);
   }
+
+  await Review.deleteMany({ product: productId });
 
   return res.status(StatusCodes.OK).json({
     status: 'success',
