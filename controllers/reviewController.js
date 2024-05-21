@@ -36,8 +36,15 @@ export const createReview = async (req, res) => {
 };
 
 export const getAllReviews = async (req, res) => {
-  const reviews = await Review.find({});
-
+  const reviews = await Review.find({})
+    .populate({
+      path: 'product',
+      select: 'name company price',
+    })
+    .populate({
+      path: 'user',
+      select: 'name',
+    });
   return res.status(StatusCodes.OK).json({
     status: 'success',
     numOfReviews: reviews.length,
