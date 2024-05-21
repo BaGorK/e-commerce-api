@@ -67,9 +67,29 @@ export const getSingleReview = async (req, res) => {
 };
 
 export const updateReview = async (req, res) => {
+  const { id: reviewId } = req.params;
+  const { rating, title, comment } = req.body;
+
+  const review = await Review.findOne({ _id: reviewId });
+
+  if (!review) {
+    throw new NotFoundError(`No review found with id: ${reviewId}`);
+  }
+
+  checkPermissions(req.user, review.user);
+
+  review.rating = rating;
+  review.title = title;
+  review.comment = comment;
+
+  await review.save();
+
   return res.status(StatusCodes.OK).json({
     status: 'success',
     message: 'updateReview',
+    data: {
+      review,
+    },
   });
 };
 
