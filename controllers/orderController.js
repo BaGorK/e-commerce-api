@@ -81,6 +81,7 @@ export const getAllOrders = async (req, res) => {
   return res.status(StatusCodes.OK).json({
     status: 'success',
     message: 'getAllOrders',
+    numOfOrder: orders.length,
     data: {
       orders,
     },
@@ -114,8 +115,25 @@ export const getCurrentUserOrders = async (req, res) => {
   });
 };
 export const updateOrder = async (req, res) => {
+  const { id: orderId } = req.params;
+
+  const order = await Order.findById(orderId);
+
+  if (!order) {
+    throw new NotFoundError(`No order with id: ${orderId} found`);
+  }
+
+  checkPermissions(req.user, order.user);
+
+  order.paymentIntentId = paymentIntentId;
+  order.status = 'paid';
+  await order.save();
+
   return res.status(StatusCodes.OK).json({
     status: 'success',
     message: 'updateOrder',
+    data: {
+      order,
+    },
   });
 };
