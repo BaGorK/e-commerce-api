@@ -76,16 +76,34 @@ export const createOrder = async (req, res) => {
 };
 
 export const getAllOrders = async (req, res) => {
+  const orders = await Order.find({});
+
   return res.status(StatusCodes.OK).json({
     status: 'success',
     message: 'getAllOrders',
+    data: {
+      orders,
+    },
   });
 };
 
 export const getSingleOder = async (req, res) => {
+  const { id: orderId } = req.params;
+
+  const order = await Order.findById(orderId);
+
+  if (!order) {
+    throw new NotFoundError(`No order with id: ${orderId} found`);
+  }
+
+  checkPermissions(req.user, order.user);
+
   return res.status(StatusCodes.OK).json({
     status: 'success',
     message: 'getSingleOder',
+    data: {
+      order,
+    },
   });
 };
 
