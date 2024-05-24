@@ -5,8 +5,13 @@ import BadRequestError from '../errors/bad-request.js';
 import NotFoundError from '../errors/not-found.js';
 import checkPermissions from '../utils/checkPermissions.js';
 
+const fakeStripeAPI = async ({ amount, currency }) => {
+  const client_secret = 'afsfadjadfajglasjgerousdagaflsjdfjals';
+  return { client_secret, amount };
+};
+
 export const createOrder = async (req, res) => {
-  const { item: cartItems, tax, shippingFee } = req.body;
+  const { items: cartItems, tax, shippingFee } = req.body;
 
   if (!cartItems || cartItems.length < 1) {
     throw new BadRequestError('No cart items provided');
@@ -20,10 +25,10 @@ export const createOrder = async (req, res) => {
   let subtotal = 0;
 
   for (const item of cartItems) {
-    const dbProduct = await Product.findOne({ _id: item.Product });
+    const dbProduct = await Product.findOne({ _id: item.product });
 
     if (!dbProduct) {
-      throw new NotFoundError(`No Product with id: ${item.Product} found`);
+      throw new NotFoundError(`No Product with id: ${item.product} found`);
     }
 
     const { name, price, image, _id } = dbProduct;
@@ -37,18 +42,36 @@ export const createOrder = async (req, res) => {
     };
 
     // add items to order
-    orderItems += item.amount * price;
+    orderItems = [...orderItems, singleOrderItem];
 
     // calculate subtotal
     subtotal += item.amount * price;
   }
 
-  console.log(orderItems);
-  console.log(subtotal);
+  const total = subtotal + tax + shippingFee;
 
-  return res.status(StatusCodes.OK).json({
+  const paymentIntent = await fakeStripeAPI({
+    amount: total,
+    currency: 'usd',
+  });
+
+  const order = await Order.create({
+    orderItems,
+    total,
+    subtotal,
+    tax,
+    shippingFee,
+    clientSecret: paymentIntent.client_secret,
+    user: req.user.userId,
+  });
+
+  return res.status(StatusCodes.CREATED).json({
     status: 'success',
-    message: 'createOrder',
+    message: 'createOrder successful',
+    data: {
+      order,
+      clientSecret: order.clientSecret,
+    },
   });
 };
 
