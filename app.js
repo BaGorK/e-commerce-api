@@ -6,6 +6,11 @@ import mongoose from 'mongoose';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import fileUpload from 'express-fileupload';
+import helmet from 'helmet';
+import cors from 'cors';
+import xss from 'xss-clean';
+import mongoSanitize from 'express-mongo-sanitize';
+import rateLimit from 'express-rate-limit';
 
 import notFoundMiddleware from './middleware/not-found.js';
 import GlobalErrorHandlerMiddleware from './middleware/error-handler.js';
@@ -20,6 +25,18 @@ const app = express();
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+app.set('trust proxy', 1);
+app.use(helmet());
+app.use(cors());
+app.use(xss());
+app.use(mongoSanitize());
+app.use(
+  rateLimit({
+    windowMs: 10 * 60 * 1000, // 10 minutes
+    max: 100,
+  })
+);
 
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
