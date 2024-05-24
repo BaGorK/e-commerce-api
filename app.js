@@ -13,6 +13,7 @@ import authRouter from './routes/authRoute.js';
 import userRouter from './routes/userRoute.js';
 import productRouter from './routes/productRoute.js';
 import reviewRouter from './routes/reviewRoute.js';
+import orderRouter from './routes/orderRoute.js';
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productRouter);
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/orders', orderRouter);
 
 app.use(notFoundMiddleware);
 app.use(GlobalErrorHandlerMiddleware);
