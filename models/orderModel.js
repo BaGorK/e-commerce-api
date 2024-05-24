@@ -49,6 +49,8 @@ const OrderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+}, {
+  timestamps: true
 });
 
 const Order = mongoose.deleteModel('Order', OrderSchema);
