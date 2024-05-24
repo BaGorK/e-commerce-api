@@ -63,7 +63,8 @@ app.use(GlobalErrorHandlerMiddleware);
 const PORT = process.env.PORT || 3000;
 
 try {
-  await mongoose.connect(process.env.DB_LOCAL_URI);
+  // await mongoose.connect(process.env.DB_LOCAL_URI);
+  await mongoose.connect(process.env.DB_URI);
   app.listen(PORT, () =>
     console.log(`DB connected && Server listening on port: ${PORT}...`)
   );
